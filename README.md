@@ -2,13 +2,15 @@
 
 platofrm/run and gun 2D (ispirato a [Doukutsu Monogatari](https://www.cavestory.org/)) con un tocco rétro che non guasta mai basato sul MocciaVerse.
 
-**Cerco artisti pixel art che vogliono dare una mano**
+**Cerco artisti pixel art e musicisti che vogliono dare una mano**
 
 Ci lavoro quando ho voglia/tempo.
 
 ## DEMO
 
 [https://dm-story.web.app/](https://dm-story.web.app/)
+
+![alt text](https://firebasestorage.googleapis.com/v0/b/dm-story.appspot.com/o/fire.svg?alt=media&token=fd8574c0-8128-4086-8de3-13c23ccfbd41)
 
 ## DONE
 
@@ -29,7 +31,7 @@ Ci lavoro quando ho voglia/tempo.
 - **Music**
 - ...
 
-## Installation
+## Installazione
 
 Scarica unity crea un progetto schiaffaci dentro sti file, apri ./Assets/Scenes/SampleScene.unity
 
