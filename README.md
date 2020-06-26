@@ -9,7 +9,7 @@ Ci lavoro quando ho voglia/tempo.
 ## DEMO
 
 [https://dm-story.web.app/](https://dm-story.web.app/)
-
+comandi: z salta, x spara, frecce muovi (todo cambio arma, abilità azione ecc)
 ![alt text](https://firebasestorage.googleapis.com/v0/b/dm-story.appspot.com/o/fire.svg?alt=media&token=fd8574c0-8128-4086-8de3-13c23ccfbd41)
 
 ## DONE
