@@ -5,7 +5,7 @@ using UnityEngine;
 public class ContactHazard : MonoBehaviour
 {
 
-    public float damageOnHit;
+    public int damageOnHit;
 
     void OnCollisionStay2D(Collision2D col)
     {

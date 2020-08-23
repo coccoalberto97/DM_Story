@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TmpEnemy1Behaviour : MonoBehaviour
+public class TmpEnemy1Behaviour : Enemy
 {
 
     SpriteRenderer spriteRenderer;

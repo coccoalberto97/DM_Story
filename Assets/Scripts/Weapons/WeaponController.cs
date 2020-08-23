@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
-    public Weapon weapon;
+    public List<Weapon> weaponsOwned;
+    private int equippedWeaponId;
+    private Weapon equippedWeapon;
     private Player player;
     private SpriteRenderer spriteRenderer;
     private Transform weaponTransform;
@@ -14,19 +16,42 @@ public class WeaponController : MonoBehaviour
         player = Player.instance;
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         weaponTransform = spriteRenderer.transform;
-        initGun();
+        initWeapon();
     }
 
 
     void Update()
     {
+        switchingWeapon();
         handleDirection();
         Shooting();
     }
 
-    private void initGun()
+    private void initWeapon()
     {
-        spriteRenderer.sprite = weapon.sprite;
+        equippedWeapon = weaponsOwned[equippedWeaponId];
+        spriteRenderer.sprite = equippedWeapon.sprite;
+    }
+
+    private void switchingWeapon()
+    {
+        int weaponIdMod = 0;
+
+        if (Input.GetButtonDown("Fire3"))
+        {
+            weaponIdMod = -1;
+        }
+        else if (Input.GetButtonDown("Fire4"))
+        {
+            weaponIdMod = 1;
+        }
+
+        if (weaponIdMod != 0)
+        {
+            equippedWeaponId = (equippedWeaponId + weaponIdMod + weaponsOwned.Count) % weaponsOwned.Count;
+            initWeapon();
+        }
+
     }
 
     private void handleDirection()
@@ -35,7 +60,7 @@ public class WeaponController : MonoBehaviour
         Direction direction = player.GetDirection();
 
         spriteRenderer.flipX = facingRight;
-        Vector2 handleOffset = new Vector2(weapon.handleOffsetX, weapon.handleOffestY);
+        Vector2 handleOffset = new Vector2(equippedWeapon.handleOffsetX, equippedWeapon.handleOffestY);
 
         float facingRightMultiplier = facingRight ? -1 : 1;
         float facingUpMultiplier = direction == Direction.UP ? 1 : -1;
@@ -68,9 +93,7 @@ public class WeaponController : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire1"))
         {
-            GameObject shootableObject = Instantiate(weapon.shootablePrefab, weaponTransform.position, Quaternion.identity);
-            IShootable shootable = shootableObject.GetComponent<IShootable>();
-            shootable.Shoot();
+            ObjectPoolManager.instance.SpawnFromPool(equippedWeapon.shootablePrefabTag, weaponTransform.position, weaponTransform.rotation, false);
         }
     }
 }

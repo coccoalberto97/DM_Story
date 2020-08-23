@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,7 +14,5 @@ public class Weapon : ScriptableObject
     public int handleOffsetX = -11;
     public int handleOffestY = -1;
 
-    public GameObject shootablePrefab;
-
-
+    public string shootablePrefabTag;
 }

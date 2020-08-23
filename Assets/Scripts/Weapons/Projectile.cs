@@ -2,35 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour, IShootable
+public class Projectile : MonoBehaviour
 {
 
     public float speed;
     public float range;
+    public int damage;
     public LayerMask hittableMask;
 
     private Player player;
     private Vector3 direction;
+    private float maxTime;
     private float time;
     private SpriteRenderer spriteRenderer;
-    private ParticleSystem hitFlash;
 
 
 
-    GameObject IShootable.gameObject()
+    public GameObject GetGameObject()
     {
         return gameObject;
     }
 
-    void IShootable.Shoot()
+    private void Awake()
     {
-        hitFlash = GetComponent<ParticleSystem>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         player = Player.instance;
-        direction = General.DirectionToVector(player.GetDirection());
+        maxTime = range / speed;
+    }
 
+    void OnEnable()
+    {
+        direction = General.DirectionToVector(player.GetDirection());
         transform.eulerAngles = Vector3.forward * Mathf.Rad2Deg * Mathf.Atan2(-direction.y, -direction.x);
-        time = range / speed;
+        time = maxTime;
+        ObjectPoolManager.instance.SpawnFromPool("particle_muzzle_flash", transform.position, Quaternion.identity);
     }
 
     // Start is called before the first frame update
@@ -46,17 +51,20 @@ public class Projectile : MonoBehaviour, IShootable
         transform.position += direction * speed * Time.deltaTime;
         if (time <= 0 && enabled)
         {
-            Die();
+            Die(false);
+            return;
         }
 
         checkForCollisions2D();
     }
 
-    public void Die()
+    public void Die(bool surfaceHit)
     {
-        hitFlash.Play();
-        spriteRenderer.enabled = false;
-        enabled = false;
+        if (!surfaceHit)
+        {
+            ObjectPoolManager.instance.SpawnFromPool("particle_muzzle_flash", transform.position, Quaternion.identity);
+        }
+        gameObject.SetActive(false);
     }
 
     void checkForCollisions2D()
@@ -64,13 +72,13 @@ public class Projectile : MonoBehaviour, IShootable
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, speed * Time.deltaTime, hittableMask.value);
         if (hit.collider != null)
         {
-            IHittable hittable = hit.collider.GetComponent<IHittable>();
-            if (hittable != null)
+            IHittable[] hittables = hit.collider.GetComponents<IHittable>();
+            foreach (IHittable hittable in hittables)
             {
-                hittable.OnHit(hit.point);
+                hittable.OnHit(hit.point, this);
             }
 
-            Die();
+            Die(true);
         }
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Controller2D))]
-public class Player : MonoBehaviour
+public class Player : Entity
 {
 
     public float maxJumpHeight = 3f;
@@ -35,8 +35,9 @@ public class Player : MonoBehaviour
     Controller2D controller;
     public static Player instance;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         instance = this;
     }
 
@@ -50,10 +51,11 @@ public class Player : MonoBehaviour
         return direction;
     }
 
-    public void ApplyDamage(float damage)
+    public void ApplyDamage(int damage)
     {
         if (!invincible)
         {
+            SubtractHealth(damage);
             Debug.Log("Damage " + damage);
             SetVelocity(Vector2.up * 16.0f);
             StartCoroutine(setInvincible());

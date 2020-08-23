@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eeaae80647ff915478e40109ee9aca6d, type: 3}
-  m_Name: testPistol
+  m_Name: testWeaponFour
   m_EditorClassIdentifier: 
-  name: Test Pistol
-  description: Lallo Lallo
-  sprite: {fileID: 21300070, guid: a6991b2b21d6ac04dbc1505544397545, type: 3}
+  name: Name
+  description: DESCRIPTION
+  sprite: {fileID: 21300000, guid: a6991b2b21d6ac04dbc1505544397545, type: 3}
   handleOffsetX: -18
   handleOffestY: 5
-  shootablePrefabTag: projectile_test_pistol_1
+  shootablePrefab: {fileID: 0}

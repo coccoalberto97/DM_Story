@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class Surface : MonoBehaviour, IHittable
 {
-    public void OnHit(Vector3 position)
+
+    public string surfaceHitParticleTag;
+
+    public void OnHit(Vector3 position, Projectile projectile)
     {
-        throw new System.NotImplementedException();
+        ObjectPoolManager.instance.SpawnFromPool(surfaceHitParticleTag, position, Quaternion.identity);
     }
 
     // Start is called before the first frame update
