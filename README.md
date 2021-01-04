@@ -17,18 +17,29 @@ comandi: z salta, x spara, frecce direzionali muovi (muose non serve)[todo cambi
 - Camera pixel perfect (32 pixel per unità)
 - Sistema di input
 - Fisica e collisioni
-- Sistema di danni (manca la salute)
+- Sistema di danni
 - Nemici senza ia
 - Armi e proiettili
+- Salute nemici
+- Morte nemici
+- Boss Fights ( Base )
+- AI nemici (chase - ground - flying)
 
 ## TODO
 
 - **Sprites 2D** (per ora uso gli asset originali di Doukutsu Monogatari)
-- AI nemici (chase - shoot)
-- Salute nemici
-- Morte nemici
-- Boss Fights
+- AI nemici (shoot)
+- Boss Fights Advenced
+- Menu (UI)
+- Morte player
+- Salvataggi
+- Effetti Sonori
+- Dialoghi
+- Cutscenes
+- Personaggi principali
+- Personaggi secondari
 - **Music**
+- **Secret**
 - ...
 
 ## Installazione
