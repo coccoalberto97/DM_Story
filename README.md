@@ -1,6 +1,6 @@
 # DM_Story
 
-platofrm/run and gun 2D (ispirato a [Doukutsu Monogatari](https://www.cavestory.org/)) con un tocco rétro che non guasta mai basato sul MocciaVerse.
+platofrm/run and gun 2D (ispirato a [Doukutsu Monogatari](https://www.cavestory.org/)) con un tocco rétro che non guasta mai basato sul VolpescuVerse.
 
 **Cerco artisti pixel art e musicisti che vogliono dare una mano**
 
