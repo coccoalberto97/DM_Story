@@ -125,7 +125,7 @@ public class Player : Entity
         {
             forceApplied = false;
         }
-        else if(controller.collisions.above || controller.collisions.below)
+        else if (controller.collisions.above || controller.collisions.below)
         {
             velocity.y = 0;
         }
@@ -161,15 +161,18 @@ public class Player : Entity
 
 
 
-    private void SetVelocity(Vector2 v) {
+    private void SetVelocity(Vector2 v)
+    {
         velocity = v;
         forceApplied = true;
     }
 
-    private IEnumerator setInvincible() {
+    private IEnumerator setInvincible()
+    {
         invincible = true;
         float elapsedTime = 0f;
-        while (elapsedTime < timeInvincible) {
+        while (elapsedTime < timeInvincible)
+        {
             spriteRenderer.enabled = !spriteRenderer.enabled;
             elapsedTime += 0.04f;
             yield return new WaitForSeconds(0.04f);
@@ -177,5 +180,11 @@ public class Player : Entity
 
         spriteRenderer.enabled = true;
         invincible = false;
+    }
+
+    protected override void ModHealth(int m)
+    {
+        base.ModHealth(m);
+        GameEvents.instance.PlayerModHealth();
     }
 }

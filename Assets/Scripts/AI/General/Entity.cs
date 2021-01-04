@@ -7,9 +7,21 @@ public class Entity : MonoBehaviour
     public int maxHealth = 10;
     private int health;
 
+    public void IncreaseMaxHealth(int m)
+    {
+        maxHealth += m;
+        ModHealth(m);
+    }
+
     public void AddHealth(int m)
     {
-        ModHealth(m);
+        int v = m;
+        if (health + m > maxHealth)
+        {
+            v = maxHealth - health;
+        }
+
+        ModHealth(v);
     }
 
     public void SubtractHealth(int m)
@@ -22,7 +34,7 @@ public class Entity : MonoBehaviour
         health = maxHealth;
     }
 
-    private void ModHealth(int m)
+    protected virtual void ModHealth(int m)
     {
         health += m;
         CheckHealth();

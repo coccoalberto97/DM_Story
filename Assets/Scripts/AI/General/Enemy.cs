@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Pathfinding;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,10 +10,14 @@ public class Enemy : Entity, IHittable
         SubtractHealth(projectile.damage);
     }
 
-
     protected override void Die()
     {
         base.Die();
         gameObject.SetActive(false);
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
     }
 }
