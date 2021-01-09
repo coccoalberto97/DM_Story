@@ -10,11 +10,12 @@ public class Projectile : MonoBehaviour
     public int damage;
     public LayerMask hittableMask;
 
-    private Player player;
-    private Vector3 direction;
-    private float maxTime;
-    private float time;
-    private SpriteRenderer spriteRenderer;
+    protected Player player;
+    protected Vector3 direction;
+    protected float maxTime;
+    protected float time;
+    protected SpriteRenderer spriteRenderer;
+    //todo particleeffect
 
 
 
@@ -28,14 +29,6 @@ public class Projectile : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         player = Player.instance;
         maxTime = range / speed;
-    }
-
-    void OnEnable()
-    {
-        direction = General.DirectionToVector(player.GetDirection());
-        transform.eulerAngles = Vector3.forward * Mathf.Rad2Deg * Mathf.Atan2(-direction.y, -direction.x);
-        time = maxTime;
-        ObjectPoolManager.instance.SpawnFromPool("particle_muzzle_flash", transform.position, Quaternion.identity);
     }
 
     // Start is called before the first frame update

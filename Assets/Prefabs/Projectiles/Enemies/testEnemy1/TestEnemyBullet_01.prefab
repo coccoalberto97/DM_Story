@@ -10,10 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7742021328915372052}
   - component: {fileID: 3768583685645263731}
-  - component: {fileID: 6043769209399104836}
-  - component: {fileID: 5168445911575629772}
+  - component: {fileID: 5715952375808398916}
   m_Layer: 11
-  m_Name: TestPistolBullet_01
+  m_Name: TestEnemyBullet_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,7 +71,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300036, guid: 3f47299f7b9ea76439b4d2039051436b, type: 3}
+  m_Sprite: {fileID: 21300024, guid: 3f47299f7b9ea76439b4d2039051436b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 1
@@ -83,25 +82,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6043769209399104836
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2334195308536498598}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 697164cd3dcadbb4abef87383e3be939, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 20
-  range: 12
-  damage: 1
-  hittableMask:
-    serializedVersion: 2
-    m_Bits: 1280
---- !u!114 &5168445911575629772
+--- !u!114 &5715952375808398916
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,12 +91,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2334195308536498598}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d3be7f25356f8144821421e1fa6f2e9, type: 3}
+  m_Script: {fileID: 11500000, guid: 59194d8cfc1d2ee47be7a4edae10b70e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 20
-  range: 12
-  damage: 1
+  speed: 10
+  range: 30
+  damage: 3
   hittableMask:
     serializedVersion: 2
-    m_Bits: 1280
+    m_Bits: 768
+  target: {fileID: 0}

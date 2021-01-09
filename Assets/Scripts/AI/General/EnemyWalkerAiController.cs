@@ -6,9 +6,17 @@ using Pathfinding;
 public class EnemyWalkerAiController : Enemy
 {
     [Header("PathFinder")]
-    public Transform target;
+    public Transform movementTarget;
     public float activateDistance = 50f;
     public float pathUpdateSeconds = 0.5f;
+
+    [Header("RangedSettings")]
+    public Transform shootingTarget;
+    public float shootingRange;
+    public float distToTarget; //la distanza alla quale inizia ad avvicinarsi per entrare in range
+    public float bulletCooldown;
+    public string shootablePrefabTag;
+    private bool canShoot = true;
 
     [Header("Physics")]
     public float speed = 200f;
@@ -19,6 +27,7 @@ public class EnemyWalkerAiController : Enemy
 
     [Header("Behavior")]
     public bool followEnabled = true;
+    public bool shootingEnabled = false;
     public bool jumpEnabled = true;
     public bool directionLookEnabled = true;
 
@@ -34,14 +43,31 @@ public class EnemyWalkerAiController : Enemy
         seeker = GetComponent<Seeker>();
         rb = GetComponent<Rigidbody2D>();
         InvokeRepeating("UpdatePath", 0f, pathUpdateSeconds);
+        if (!shootingTarget)
+        {
+            shootingTarget = Player.instance.transform;
+        }
+
+        if (!movementTarget)
+        {
+            movementTarget = Player.instance.transform;
+        }
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (TargetIsInRange() && followEnabled)
+        if (followEnabled && TargetIsInMovementRange())
         {
             Move();
+        }
+
+        if (shootingEnabled && TargetIsInShootingRange())
+        {
+            if (canShoot)
+            {
+                StartCoroutine(Shoot());
+            }
         }
     }
 
@@ -114,16 +140,30 @@ public class EnemyWalkerAiController : Enemy
         }
     }
 
-    private bool TargetIsInRange()
+    private bool TargetIsInMovementRange()
     {
-        return Vector2.Distance(transform.position, target.transform.position) < activateDistance;
+        return Vector2.Distance(transform.position, movementTarget.transform.position) < activateDistance;
+    }
+
+
+    private IEnumerator Shoot()
+    {
+        canShoot = false;
+        yield return new WaitForSeconds(bulletCooldown);
+        ObjectPoolManager.instance.SpawnFromPool(shootablePrefabTag, transform.position, Quaternion.identity, false);
+        canShoot = true;
+    }
+
+    private bool TargetIsInShootingRange()
+    {
+        return Vector2.Distance(transform.position, shootingTarget.transform.position) < shootingRange;
     }
 
     void UpdatePath()
     {
         if (seeker.IsDone())
         {
-            seeker.StartPath(rb.position, target.position, OnPathComplete);
+            seeker.StartPath(rb.position, movementTarget.position, OnPathComplete);
         }
     }
 }

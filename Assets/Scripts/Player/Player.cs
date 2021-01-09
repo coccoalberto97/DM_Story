@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Controller2D))]
-public class Player : Entity
+public class Player : Entity, IHittable
 {
 
     public float maxJumpHeight = 3f;
@@ -186,5 +186,10 @@ public class Player : Entity
     {
         base.ModHealth(m);
         GameEvents.instance.PlayerModHealth();
+    }
+
+    public void OnHit(Vector3 position, Projectile projectile)
+    {
+        ApplyDamage(projectile.damage);
     }
 }

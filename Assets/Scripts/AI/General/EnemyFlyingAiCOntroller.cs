@@ -3,13 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyFlyingAiCOntroller : Enemy
+public class EnemyFlyingAiController : Enemy
 {
 
     [Header("PathFinder")]
-    public Transform target;
+    public Transform movementTarget;
     public float activateDistance = 50f;
     public float pathUpdateSeconds = 0.5f;
+
+    [Header("RangedSettings")]
+    public Transform shootingTarget;
+    public float shootingRange;
+    public float distToTarget; //la distanza alla quale inizia ad avvicinarsi per entrare in range
+    public float bulletCooldown;
+    public string shootablePrefabTag;
+    private bool canShoot = true;
 
     [Header("Physics")]
     public float speed = 200f;
@@ -21,6 +29,7 @@ public class EnemyFlyingAiCOntroller : Enemy
 
     [Header("Behavior")]
     public bool followEnabled = true;
+    public bool shootingEnabled = false;
     public bool dashEnabled = true;
     public bool directionLookEnabled = true;
 
@@ -36,6 +45,15 @@ public class EnemyFlyingAiCOntroller : Enemy
         seeker = GetComponent<Seeker>();
         rb = GetComponent<Rigidbody2D>();
         InvokeRepeating("UpdatePath", 0f, pathUpdateSeconds);
+        if (!shootingTarget)
+        {
+            shootingTarget = Player.instance.transform;
+        }
+
+        if (!movementTarget)
+        {
+            movementTarget = Player.instance.transform;
+        }
     }
 
     // Update is called once per frame
@@ -44,6 +62,14 @@ public class EnemyFlyingAiCOntroller : Enemy
         if (TargetIsInRange() && followEnabled)
         {
             Move();
+        }
+
+        if (shootingEnabled && TargetIsInShootingRange())
+        {
+            if (canShoot)
+            {
+                StartCoroutine(Shoot());
+            }
         }
     }
 
@@ -118,14 +144,28 @@ public class EnemyFlyingAiCOntroller : Enemy
 
     private bool TargetIsInRange()
     {
-        return Vector2.Distance(transform.position, target.transform.position) < activateDistance;
+        return Vector2.Distance(transform.position, movementTarget.transform.position) < activateDistance;
+    }
+
+
+    private IEnumerator Shoot()
+    {
+        ObjectPoolManager.instance.SpawnFromPool(shootablePrefabTag, transform.position, Quaternion.identity, false);
+        canShoot = false;
+        yield return new WaitForSeconds(bulletCooldown);
+        canShoot = true;
+    }
+
+    private bool TargetIsInShootingRange()
+    {
+        return Vector2.Distance(transform.position, shootingTarget.transform.position) < shootingRange;
     }
 
     void UpdatePath()
     {
         if (seeker.IsDone())
         {
-            seeker.StartPath(rb.position, target.position, OnPathComplete);
+            seeker.StartPath(rb.position, movementTarget.position, OnPathComplete);
         }
     }
 }
