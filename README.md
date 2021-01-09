@@ -23,12 +23,12 @@ comandi: z salta, x spara, frecce direzionali muovi (muose non serve)[todo cambi
 - Salute nemici
 - Morte nemici
 - Boss Fights ( Base )
-- AI nemici (chase - ground - flying)
+- AI nemici base (chase - ground - flying - shoot)
 
 ## TODO
 
 - **Sprites 2D** (per ora uso gli asset originali di Doukutsu Monogatari)
-- AI nemici (shoot)
+- AI nemici advanced
 - Boss Fights Advenced
 - Menu (UI)
 - Morte player
