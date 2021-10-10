@@ -24,6 +24,11 @@ public class Entity : MonoBehaviour
         ModHealth(v);
     }
 
+    public void restoreFullHealth()
+    {
+        AddHealth(maxHealth);
+    }
+
     public void SubtractHealth(int m)
     {
         ModHealth(-m);
@@ -61,5 +66,20 @@ public class Entity : MonoBehaviour
     public int getHealth()
     {
         return health;
+    }
+
+    public void setHealth(int health)
+    {
+        if (health > 0)
+        {
+            if (health > this.maxHealth)
+            {
+                this.health = this.maxHealth;
+            }
+            else
+            {
+                this.health = health;
+            }
+        }
     }
 }

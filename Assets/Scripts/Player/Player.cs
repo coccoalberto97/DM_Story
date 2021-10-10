@@ -16,7 +16,7 @@ public class Player : Entity, IHittable
     public bool invincible;
     public bool forceApplied;
 
-    float moveSpeed = 6f;
+    public float moveSpeed = 6f;
     float gravity;
     float maxJumpVelocity;
     float minJumpVelocity;
@@ -29,11 +29,14 @@ public class Player : Entity, IHittable
 
     Animator animator;
     SpriteRenderer spriteRenderer;
+    public GameObject interactableIcon;
 
     KeyCode jumpkey = KeyCode.Z;
 
     Controller2D controller;
     public static Player instance;
+
+    public Vector2 colliderSize = new Vector2(1.5f, 3);
 
     protected override void Awake()
     {
@@ -58,7 +61,7 @@ public class Player : Entity, IHittable
             SubtractHealth(damage);
             Debug.Log("Damage " + damage);
             SetVelocity(Vector2.up * 16.0f);
-            StartCoroutine(setInvincible());
+            StartCoroutine(SetInvincible());
         }
     }
 
@@ -80,7 +83,7 @@ public class Player : Entity, IHittable
         Horizontal();
         Vertical();
         ApplyMovement();
-
+        GetKey();
     }
 
     private void GetInput()
@@ -160,6 +163,15 @@ public class Player : Entity, IHittable
     }
 
 
+    private void GetKey()
+    {
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            CheckInteraction();
+        }
+    }
+
+
 
     private void SetVelocity(Vector2 v)
     {
@@ -167,7 +179,7 @@ public class Player : Entity, IHittable
         forceApplied = true;
     }
 
-    private IEnumerator setInvincible()
+    private IEnumerator SetInvincible()
     {
         invincible = true;
         float elapsedTime = 0f;
@@ -191,5 +203,35 @@ public class Player : Entity, IHittable
     public void OnHit(Vector3 position, Projectile projectile)
     {
         ApplyDamage(projectile.damage);
+    }
+
+    public void LoadData(SaveData data) {
+        if (data != null)
+        {
+            this.maxHealth = data.maxHp;
+            this.setHealth(data.currentHp);
+            this.transform.position = new Vector3(data.currentX, data.currentY, 0);
+        }
+    }
+
+    public void ToggleInteractableIcon(bool active)
+    {
+        this.interactableIcon.SetActive(active);
+    }
+
+    private void CheckInteraction()
+    {
+        RaycastHit2D[] hits = Physics2D.BoxCastAll(transform.position, colliderSize, 0, Vector2.zero);
+        if (hits.Length > 0)
+        {
+            foreach (RaycastHit2D hit in hits)
+            {
+                Interactable interactable = hit.transform.GetComponent<Interactable>();
+                if (interactable)
+                {
+                    interactable.Interact();
+                }
+            }
+        }
     }
 }

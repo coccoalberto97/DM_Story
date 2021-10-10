@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3165851726545402376}
   - component: {fileID: 5469908804799226904}
   - component: {fileID: 1419046566243528678}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: EnemyHitFlash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4794,8 +4794,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 372127695
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_RenderMode: 0
   m_SortMode: 0

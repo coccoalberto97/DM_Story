@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1467244206311756124}
   - component: {fileID: 3646273595355810881}
   - component: {fileID: 5585662916726954141}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SurfaceHitParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
