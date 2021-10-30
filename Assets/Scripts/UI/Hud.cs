@@ -128,7 +128,7 @@ public class Hud : MonoBehaviour
         foreach (char letter in sentence.text.ToCharArray())
         {
             sentenceBox.text += letter;
-            yield return new WaitForSeconds(.01f);
+            yield return 0;
         }
 
         currentSentence = null;
