@@ -4,21 +4,36 @@ using UnityEngine;
 
 public class CharacterImageController : MonoBehaviour
 {
-    public GameObject charPrefab;
+    public CharPrefab charPrefab;
 
 
-    private DialogueCharacter[] chars;
-
+    private List<CharPrefab> chars = new List<CharPrefab>();
 
     public void initChars(DialogueCharacter[] characters)
     {
-        chars = characters;
-
-        foreach (DialogueCharacter c in chars)
+        foreach (CharPrefab c in chars)
         {
-            Instantiate(charPrefab, transform);
+            Destroy(c);
         }
 
+        chars = new List<CharPrefab>();
 
+        foreach (DialogueCharacter c in characters)
+        {
+            CharPrefab prefab = Instantiate(charPrefab, transform);
+            prefab.image.texture = c.charImage;
+            prefab.name.text = c.charName.ToString();
+            prefab.charName = c.charName;
+            prefab.SetActive(CharNameEnum.EMPTY);
+            chars.Add(prefab);
+        }
+    }
+
+    public void EnableChar(CharNameEnum charname)
+    {
+        foreach (CharPrefab c in chars)
+        {
+            c.SetActive(charname);
+        }
     }
 }

@@ -124,15 +124,7 @@ public class Hud : MonoBehaviour
         }
 
         sentenceBox.text = "";
-        /*if (sentence.charName != CharNameEnum.EMPTY)
-        {
-            dialogueChar.enabled = true;
-            //dialogueChar.sprite = sentence.charImage;
-        }
-        else
-        {
-            dialogueChar.enabled = false;
-        }*/
+        characterImageController.EnableChar(sentence.charName);
         int charIndex = 0;
         foreach (char letter in sentence.text.ToCharArray())
         {
