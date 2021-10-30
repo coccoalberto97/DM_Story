@@ -18,12 +18,14 @@ public class Hud : MonoBehaviour
 
     //Dialogue
     public GameObject dialogueContainer;
+    public CharacterImageController characterImageController;
     public TextMeshProUGUI calledName;
     public TextMeshProUGUI sentenceBox;
     public Coroutine currentSentence;
-    public Image dialogueChar;
 
     private Queue<Sentence> sentences;
+
+    public AudioClip alert;
 
 
     private void Awake()
@@ -77,10 +79,11 @@ public class Hud : MonoBehaviour
 
     public void StartDialogue(Dialogue dialogue)
     {
-        Debug.Log("name " + dialogue.calledName);
-        calledName.text = dialogue.calledName;
+        /*Debug.Log("name " + dialogue.calledName);
+        calledName.text = dialogue.calledName;*/
         sentences.Clear();
         animator.SetBool("isOpen", true);
+        characterImageController.initChars(dialogue.characters);
         foreach (Sentence sentence in dialogue.sentences)
         {
             sentences.Enqueue(sentence);
@@ -115,19 +118,35 @@ public class Hud : MonoBehaviour
 
     private IEnumerator TypeSentence(Sentence sentence)
     {
+        if (sentence.ost != null)
+        {
+            GameEvents.instance.PlayOSTAudioClip(sentence.ost);
+        }
+
         sentenceBox.text = "";
-        if (sentence.charImage != null)
+        /*if (sentence.charName != CharNameEnum.EMPTY)
         {
             dialogueChar.enabled = true;
-            dialogueChar.sprite = sentence.charImage;
+            //dialogueChar.sprite = sentence.charImage;
         }
         else
         {
             dialogueChar.enabled = false;
-        }
+        }*/
+        int charIndex = 0;
         foreach (char letter in sentence.text.ToCharArray())
         {
+            if (sentence.charStop > -1)
+            {
+                if (sentence.charStop == charIndex)
+                {
+                    GameEvents.instance.StopAudio();
+                    GameEvents.instance.PlaySFXAudioClip(this.alert);
+                    break;
+                }
+            }
             sentenceBox.text += letter;
+            charIndex++;
             yield return 0;
         }
 
