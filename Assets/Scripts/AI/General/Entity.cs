@@ -5,6 +5,7 @@ using UnityEngine;
 public class Entity : MonoBehaviour
 {
     public int maxHealth = 10;
+    public DamageTypeEnum entityElement = DamageTypeEnum.DEFAULT;
     private int health;
 
     public void IncreaseMaxHealth(int m)

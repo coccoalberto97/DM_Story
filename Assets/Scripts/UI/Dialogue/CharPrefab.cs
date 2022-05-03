@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class CharPrefab : MonoBehaviour
 {
     public RawImage image;
-    public TextMeshProUGUI name;
+    public TextMeshProUGUI nameLabel;
     public CharNameEnum charName;
 
     public void SetActive(CharNameEnum charName)

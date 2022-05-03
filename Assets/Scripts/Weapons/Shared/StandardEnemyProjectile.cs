@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyProjectile : Projectile
+public class StandardEnemyProjectile : ProjectileDamageSource
 {
 
     public Transform target;
     public bool direct;
+    public string timeoutMuzzleFlash = "particle_muzzle_flash";
 
-    void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         if (!target)
         {
             target = player.transform;
@@ -46,5 +48,31 @@ public class EnemyProjectile : Projectile
         transform.eulerAngles = Vector3.forward * Mathf.Rad2Deg * Mathf.Atan2(-direction.y, -direction.x);
         time = maxTime;
         ObjectPoolManager.instance.SpawnFromPool("particle_muzzle_flash", transform.position, Quaternion.identity);
+    }
+
+    public override bool CheckForCollisions2D()
+    {
+        if (base.CheckForCollisions2D())
+        {
+            Die(true);
+            return true;
+        }
+        return false;
+    }
+
+    public override void Die(bool surfaceHit)
+    {
+        if (!surfaceHit && !string.IsNullOrEmpty(timeoutMuzzleFlash))
+        {
+            ObjectPoolManager.instance.SpawnFromPool(timeoutMuzzleFlash, transform.position, Quaternion.identity);
+        }
+        base.Die(surfaceHit);
+    }
+
+    public override void Update()
+    {
+        transform.position += direction * speed * Time.deltaTime;
+        base.Update();
+        CheckForCollisions2D();
     }
 }

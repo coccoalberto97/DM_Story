@@ -16,16 +16,22 @@ public class Hud : MonoBehaviour
     public Slider bossHealthBarSlider;
     public TextMeshProUGUI playerHealth;
 
+    public Slider playerExpBarSlider;
+    public TextMeshProUGUI playerExp;
+
     //Dialogue
     public GameObject dialogueContainer;
     public CharacterImageController characterImageController;
     public TextMeshProUGUI calledName;
     public TextMeshProUGUI sentenceBox;
-    public Coroutine currentSentence;
+    public Coroutine currentSentenceCoroutine;
+    public Sentence currentSentence;
 
     private Queue<Sentence> sentences;
 
     public AudioClip alert;
+
+    private bool currentSentenceEnded = true;
 
 
     private void Awake()
@@ -41,9 +47,11 @@ public class Hud : MonoBehaviour
         GameEvents.instance.OnBossDeath += OnBossDeath;
         GameEvents.instance.OnBossHit += OnBossHit;
         GameEvents.instance.OnPlayerModHealth += OnPlayerModHealth;
+        GameEvents.instance.OnPlayerModExp += OnPlayerModExp;
         sentences = new Queue<Sentence>();
 
         SetHealth();
+        SetExp();
     }
 
     private void OnPlayerEntersBoosArea(string bossTag, int maxHealth)
@@ -77,13 +85,26 @@ public class Hud : MonoBehaviour
         playerHealthBarSlider.value = player.getHealth();
     }
 
+    private void OnPlayerModExp()
+    {
+        SetExp();
+    }
+
+    private void SetExp()
+    {
+        Player player = Player.instance;
+        playerExp.text = player.GetExp().ToString();
+        playerExpBarSlider.maxValue = player.maxExp;
+        playerExpBarSlider.value = player.GetExp();
+    }
+
     public void StartDialogue(Dialogue dialogue)
     {
         /*Debug.Log("name " + dialogue.calledName);
         calledName.text = dialogue.calledName;*/
         sentences.Clear();
         animator.SetBool("isOpen", true);
-        characterImageController.initChars(dialogue.characters);
+        characterImageController.InitChars(dialogue.characters);
         foreach (Sentence sentence in dialogue.sentences)
         {
             sentences.Enqueue(sentence);
@@ -93,6 +114,29 @@ public class Hud : MonoBehaviour
 
     public void DisplayNextSentence()
     {
+        //controllo se il dialogo corrente è terminato
+        if (!currentSentenceEnded)
+        {
+            //se non è terminato completo il testo
+            string text = currentSentence.text;
+            if (currentSentence.charStop > -1)
+            {
+                text = text.Substring(0, currentSentence.charStop + 1);
+                GameEvents.instance.StopAudio();
+                GameEvents.instance.PlaySFXAudioClip(this.alert);
+            }
+
+            sentenceBox.text = text;
+            if (currentSentenceCoroutine != null)
+            {
+                StopCoroutine(currentSentenceCoroutine);
+                currentSentenceCoroutine = null;
+            }
+            currentSentenceEnded = true;
+            return;
+        }
+
+
         if (sentences.Count == 0)
         {
             EndDialogue();
@@ -101,23 +145,25 @@ public class Hud : MonoBehaviour
 
         Sentence sentence = sentences.Dequeue();
 
-        if (currentSentence != null)
+        if (currentSentenceCoroutine != null)
         {
-            StopCoroutine(currentSentence);
+            StopCoroutine(currentSentenceCoroutine);
         }
 
-        currentSentence = StartCoroutine(TypeSentence(sentence));
+        currentSentenceCoroutine = StartCoroutine(TypeSentence(sentence));
 
     }
 
     public void EndDialogue()
     {
-        //dialogueContainer.SetActive(false);
+        characterImageController.HideChars();
         animator.SetBool("isOpen", false);
     }
 
     private IEnumerator TypeSentence(Sentence sentence)
     {
+        currentSentenceEnded = false;
+        currentSentence = sentence;
         if (sentence.ost != null)
         {
             GameEvents.instance.PlayOSTAudioClip(sentence.ost);
@@ -139,9 +185,9 @@ public class Hud : MonoBehaviour
             }
             sentenceBox.text += letter;
             charIndex++;
-            yield return 0;
+            yield return new WaitForSeconds(0.03f);
         }
-
-        currentSentence = null;
+        currentSentenceEnded = true;
+        currentSentenceCoroutine = null;
     }
 }

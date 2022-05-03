@@ -9,8 +9,9 @@ public class CharacterImageController : MonoBehaviour
 
     private List<CharPrefab> chars = new List<CharPrefab>();
 
-    public void initChars(DialogueCharacter[] characters)
+    public void InitChars(DialogueCharacter[] characters)
     {
+        gameObject.SetActive(true);
         foreach (CharPrefab c in chars)
         {
             Destroy(c);
@@ -22,7 +23,7 @@ public class CharacterImageController : MonoBehaviour
         {
             CharPrefab prefab = Instantiate(charPrefab, transform);
             prefab.image.texture = c.charImage;
-            prefab.name.text = c.charName.ToString();
+            prefab.nameLabel.text = c.charName.ToString();
             prefab.charName = c.charName;
             prefab.SetActive(CharNameEnum.EMPTY);
             chars.Add(prefab);
@@ -35,5 +36,10 @@ public class CharacterImageController : MonoBehaviour
         {
             c.SetActive(charname);
         }
+    }
+
+    public void HideChars()
+    {
+        gameObject.SetActive(false);
     }
 }

@@ -239,7 +239,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 3336252024553498811}
-  name: {fileID: 7161431473610948387}
+  nameLabel: {fileID: 7161431473610948387}
+  charName: 0
 --- !u!1 &7266143230541469039
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,4 +17,13 @@ MonoBehaviour:
   sprite: {fileID: 21300070, guid: a6991b2b21d6ac04dbc1505544397545, type: 3}
   handleOffsetX: -18
   handleOffestY: 5
-  shootablePrefabTag: projectile_test_pistol_1
+  shootables:
+  - requiredExp: 0
+    shootablePrefabTag: projectile_test_pistol_1
+  - requiredExp: 40
+    shootablePrefabTag: projectile_test_pistol_2
+  - requiredExp: 65
+    shootablePrefabTag: projectile_test_pistol_3
+  currentDescriptor:
+    requiredExp: 40
+    shootablePrefabTag: projectile_test_pistol_2

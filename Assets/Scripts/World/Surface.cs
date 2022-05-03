@@ -7,7 +7,7 @@ public class Surface : MonoBehaviour, IHittable
 
     public string surfaceHitParticleTag;
 
-    public void OnHit(Vector3 position, Projectile projectile)
+    public void OnHit(Vector3 position, DynamicDamageSource projectile)
     {
         ObjectPoolManager.instance.SpawnFromPool(surfaceHitParticleTag, position, Quaternion.identity);
     }

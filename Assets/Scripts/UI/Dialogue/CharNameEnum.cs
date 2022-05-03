@@ -2,5 +2,7 @@ public enum CharNameEnum
 {
     EMPTY,
     VOLPESCU,
-    CICCIO_FRATM
+    GALO,
+    CICCIO_FRATM,
+    LAP_APERA
 }

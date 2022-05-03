@@ -11,29 +11,30 @@ public class WeaponController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Transform weaponTransform;
 
-    void Start()
+    public void Start()
     {
         player = Player.instance;
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         weaponTransform = spriteRenderer.transform;
-        initWeapon();
+        GameEvents.instance.OnPlayerModExp += OnPlayerModExp;
+        InitWeapon();
     }
 
-
-    void Update()
+    public void Update()
     {
-        switchingWeapon();
-        handleDirection();
+        CheckSwitchgWeapon();
+        HandleDirection();
         Shooting();
     }
 
-    private void initWeapon()
+    private void InitWeapon()
     {
         equippedWeapon = weaponsOwned[equippedWeaponId];
         spriteRenderer.sprite = equippedWeapon.sprite;
+        equippedWeapon.SetShootable(Player.instance.GetExp());
     }
 
-    private void switchingWeapon()
+    private void CheckSwitchgWeapon()
     {
         int weaponIdMod = 0;
 
@@ -49,12 +50,11 @@ public class WeaponController : MonoBehaviour
         if (weaponIdMod != 0)
         {
             equippedWeaponId = (equippedWeaponId + weaponIdMod + weaponsOwned.Count) % weaponsOwned.Count;
-            initWeapon();
+            InitWeapon();
         }
-
     }
 
-    private void handleDirection()
+    private void HandleDirection()
     {
         bool facingRight = player.IsFacingRight();
         Direction direction = player.GetDirection();
@@ -93,7 +93,16 @@ public class WeaponController : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire1"))
         {
-            ObjectPoolManager.instance.SpawnFromPool(equippedWeapon.shootablePrefabTag, weaponTransform.position, weaponTransform.rotation, false);
+            if (equippedWeapon.currentDescriptor != null)
+            {
+                ObjectPoolManager.instance.SpawnFromPool(equippedWeapon.currentDescriptor.shootablePrefabTag, weaponTransform.position, weaponTransform.rotation, false);
+            }
         }
     }
+
+    private void OnPlayerModExp()
+    {
+        equippedWeapon.SetShootable(Player.instance.GetExp());
+    }
+
 }

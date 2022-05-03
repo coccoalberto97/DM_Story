@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7742021328915372052}
   - component: {fileID: 3768583685645263731}
-  - component: {fileID: 6043769209399104836}
   - component: {fileID: 5168445911575629772}
   m_Layer: 11
   m_Name: TestPistolBullet_01
@@ -48,6 +47,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -83,24 +83,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6043769209399104836
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2334195308536498598}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 697164cd3dcadbb4abef87383e3be939, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 20
-  range: 12
-  damage: 1
-  hittableMask:
-    serializedVersion: 2
-    m_Bits: 1280
 --- !u!114 &5168445911575629772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,9 +95,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d3be7f25356f8144821421e1fa6f2e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 20
-  range: 12
-  damage: 1
+  damage: 10
   hittableMask:
     serializedVersion: 2
     m_Bits: 1280
+  weaponDamageType: 1
+  speed: 20
+  range: 12
+  timeoutMuzzleFlash: particle_muzzle_flash

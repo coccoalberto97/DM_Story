@@ -12,7 +12,7 @@ public class Boss : Enemy
         GameEvents.instance.BossDeath(bossTag);
     }
 
-    public override void OnHit(Vector3 position, Projectile projectile)
+    public override void OnHit(Vector3 position, DynamicDamageSource projectile)
     {
         base.OnHit(position, projectile);
         GameEvents.instance.BossHit(getHealth());

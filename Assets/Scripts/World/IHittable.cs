@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IHittable
 {
-    void OnHit(Vector3 position, Projectile projectile);
+    void OnHit(Vector3 position, DynamicDamageSource projectile);
 }

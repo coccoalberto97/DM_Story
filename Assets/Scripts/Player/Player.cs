@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,6 +39,9 @@ public class Player : Entity, IHittable
 
     public Vector2 colliderSize = new Vector2(1.5f, 3);
 
+    private int currentExp = 0;
+    public int maxExp = 100;
+
     protected override void Awake()
     {
         base.Awake();
@@ -59,7 +63,10 @@ public class Player : Entity, IHittable
         if (!invincible)
         {
             SubtractHealth(damage);
-            Debug.Log("Damage " + damage);
+            //devo castare a double per non perdere la precisione
+            double expFactor = (double)damage * 100 / maxHealth;
+            SubtractExp((int)Math.Floor(expFactor));
+            Debug.Log($"Damage {damage} exp lost {expFactor}");
             SetVelocity(Vector2.up * 16.0f);
             StartCoroutine(SetInvincible());
         }
@@ -200,12 +207,27 @@ public class Player : Entity, IHittable
         GameEvents.instance.PlayerModHealth();
     }
 
-    public void OnHit(Vector3 position, Projectile projectile)
+    public void OnHit(Vector3 position, DynamicDamageSource projectile)
     {
         ApplyDamage(projectile.damage);
     }
 
-    public void LoadData(SaveData data) {
+    protected void ModExp(int exp)
+    {
+        currentExp += exp;
+        if (currentExp <= 0)
+        {
+            currentExp = 0;
+        }
+        else if (currentExp > maxExp)
+        {
+            currentExp = maxExp;
+        }
+        GameEvents.instance.PlayerModExp();
+    }
+
+    public void LoadData(SaveData data)
+    {
         if (data != null)
         {
             this.maxHealth = data.maxHp;
@@ -233,5 +255,20 @@ public class Player : Entity, IHittable
                 }
             }
         }
+    }
+
+    public void AddExp(int exp)
+    {
+        ModExp(exp);
+    }
+
+    public void SubtractExp(int exp)
+    {
+        ModExp(-exp);
+    }
+
+    public int GetExp()
+    {
+        return currentExp;
     }
 }

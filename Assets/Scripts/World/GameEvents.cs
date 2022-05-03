@@ -3,12 +3,12 @@ using System;
 
 public class GameEvents : MonoBehaviour
 {
-
     public static GameEvents instance;
     public event Action<string, int> OnPlayerEntersBoosArea;
     public event Action<string> OnBossDeath;
     public event Action<int> OnBossHit;
     public event Action OnPlayerModHealth;
+    public event Action OnPlayerModExp;
     public event Action<AudioClip> OnPlaySFXAudioClip;
     public event Action OnStopSFXAudioClip;
     public event Action<AudioClip> OnPlayOSTAudioClip;
@@ -73,11 +73,17 @@ public class GameEvents : MonoBehaviour
     {
         OnStopOSTAudioClip?.Invoke();
     }
+
     /// <summary>
     /// Manda all' Audio manager il segnale di terminare tutti i suoni e le ost in riproduzione
     /// </summary>
     public void StopAudio()
     {
         OnStopAudio?.Invoke();
+    }
+
+    public void PlayerModExp()
+    {
+        OnPlayerModExp?.Invoke();
     }
 }
