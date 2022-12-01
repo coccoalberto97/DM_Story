@@ -10,7 +10,12 @@ public class CameraBehaviour : MonoBehaviour
     public float ppu = 16f;
 
     private Vector3 velocity;
-    private Vector3 proxyPosition = new Vector3();
+    private Vector3 proxyPosition;
+
+    private void Start()
+    {
+        proxyPosition = new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y, 0);
+    }
 
 
 

@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DialogueTrigger : MonoBehaviour
+public class DialogueTrigger : Trigger
 {
     public Dialogue dialogue;
 
-    public void TriggerDialogue()
+    protected override void TriggerAction()
     {
+        base.TriggerAction();
         Hud.instance.StartDialogue(dialogue);
     }
 }

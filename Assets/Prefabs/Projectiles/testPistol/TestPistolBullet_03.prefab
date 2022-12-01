@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d3be7f25356f8144821421e1fa6f2e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 6
+  damage: 20
   hittableMask:
     serializedVersion: 2
     m_Bits: 1280

@@ -41,6 +41,7 @@ public class Player : Entity, IHittable
 
     private int currentExp = 0;
     public int maxExp = 100;
+    private bool inputEnabled = true;
 
     protected override void Awake()
     {
@@ -85,6 +86,10 @@ public class Player : Entity, IHittable
 
     private void Update()
     {
+        if (!inputEnabled)
+        {
+            return;
+        }
         GetInput();
         Animation();
         Horizontal();
@@ -178,8 +183,6 @@ public class Player : Entity, IHittable
         }
     }
 
-
-
     private void SetVelocity(Vector2 v)
     {
         velocity = v;
@@ -270,5 +273,13 @@ public class Player : Entity, IHittable
     public int GetExp()
     {
         return currentExp;
+    }
+
+    public void SetInputEnabled(bool inputEnabled) {
+        this.inputEnabled = inputEnabled;
+    }
+
+    public bool GetInputEnabled() {
+        return this.inputEnabled;
     }
 }

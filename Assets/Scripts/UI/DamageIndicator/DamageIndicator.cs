@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 
 
-[RequireComponent(typeof(TextMeshProUGUI))]
+[RequireComponent(typeof(TextMeshPro))]
 public class DamageIndicator : MonoBehaviour
 {
     private TextMeshPro textLabel;
@@ -62,7 +62,7 @@ public class DamageIndicator : MonoBehaviour
 
         if(spriteIndex != 0)
         {
-            sprite = $"<sprite index={spriteIndex} tint=1 color={elementEffectiveness.receiverColor} >";
+            sprite = $"<sprite index={spriteIndex} tint=1 color={elementEffectiveness.attackerColor} >";
         }
         indicator.textLabel.fontSize = fontSize;
         indicator.textLabel.SetText($"<color={elementEffectiveness.attackerColor}>{damage.ToString()}</color> {sprite}");

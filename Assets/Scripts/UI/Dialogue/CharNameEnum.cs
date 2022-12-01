@@ -4,5 +4,6 @@ public enum CharNameEnum
     VOLPESCU,
     GALO,
     CICCIO_FRATM,
-    LAP_APERA
+    LAP_APERA,
+    AIRU
 }

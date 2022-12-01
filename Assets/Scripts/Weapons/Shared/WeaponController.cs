@@ -22,6 +22,9 @@ public class WeaponController : MonoBehaviour
 
     public void Update()
     {
+        if (!player.GetInputEnabled()) {
+            return;
+        }
         CheckSwitchgWeapon();
         HandleDirection();
         Shooting();
@@ -91,7 +94,7 @@ public class WeaponController : MonoBehaviour
 
     private void Shooting()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1")) // Input.GetButton("Fire1") for automatic
         {
             if (equippedWeapon.currentDescriptor != null)
             {

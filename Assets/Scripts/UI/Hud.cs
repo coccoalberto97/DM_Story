@@ -54,6 +54,18 @@ public class Hud : MonoBehaviour
         SetExp();
     }
 
+    private void Update()
+    {
+        if (currentSentence == null) {
+            return;
+        }
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            DisplayNextSentence();
+        }
+    }
+
     private void OnPlayerEntersBoosArea(string bossTag, int maxHealth)
     {
         bossHealthBar.SetActive(true);
@@ -102,6 +114,7 @@ public class Hud : MonoBehaviour
     {
         /*Debug.Log("name " + dialogue.calledName);
         calledName.text = dialogue.calledName;*/
+        Player.instance.SetInputEnabled(false);
         sentences.Clear();
         animator.SetBool("isOpen", true);
         characterImageController.InitChars(dialogue.characters);
@@ -158,6 +171,7 @@ public class Hud : MonoBehaviour
     {
         characterImageController.HideChars();
         animator.SetBool("isOpen", false);
+        Player.instance.SetInputEnabled(true);
     }
 
     private IEnumerator TypeSentence(Sentence sentence)

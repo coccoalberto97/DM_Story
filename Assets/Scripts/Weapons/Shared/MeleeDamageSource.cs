@@ -10,6 +10,7 @@ public class MeleeDamageSource : DynamicDamageSource
     protected Collider2D colliderElement;
 
     private ContactFilter2D filter2D;
+    Animator anim;
 
     protected override void OnEnable()
     {
@@ -17,7 +18,14 @@ public class MeleeDamageSource : DynamicDamageSource
         colliderElement = GetComponent<Collider2D>();
         filter2D = new ContactFilter2D();
         filter2D.layerMask = hittableMask;
+        anim = GetComponent<Animator>();
+        maxTime = anim.runtimeAnimatorController.animationClips[0].length;
         CheckForCollisions2D();
+    }
+
+    public virtual void Die(bool surfaceHit)
+    {
+        gameObject.SetActive(false);
     }
 
 
@@ -57,5 +65,15 @@ public class MeleeDamageSource : DynamicDamageSource
             }
         }
         return ret;
+    }
+
+    public virtual void Update()
+    {
+        time -= Time.deltaTime;
+        if (time <= 0 && enabled)
+        {
+            Die(false);
+            return;
+        }
     }
 }

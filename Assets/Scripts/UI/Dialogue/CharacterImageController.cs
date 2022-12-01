@@ -14,7 +14,7 @@ public class CharacterImageController : MonoBehaviour
         gameObject.SetActive(true);
         foreach (CharPrefab c in chars)
         {
-            Destroy(c);
+            Destroy(c.gameObject);
         }
 
         chars = new List<CharPrefab>();
