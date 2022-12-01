@@ -147,7 +147,7 @@ public class Player : Entity, IHittable
 
         if (Input.GetKeyDown(jumpkey) && controller.collisions.below)
         {
-            velocity.y = maxJumpVelocity;
+            //velocity.y = maxJumpVelocity;
         }
 
         if (Input.GetKeyUp(jumpkey))
