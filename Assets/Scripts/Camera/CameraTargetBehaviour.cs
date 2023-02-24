@@ -14,7 +14,7 @@ public class CameraTargetBehaviour : MonoBehaviour
 
     private void Update()
     {
-        Vector3 localPos = new Vector3(player.IsFacingRight() ? 1f : -1f, General.DirectionToVector(player.GetDirection()).y, 0f);
+        Vector3 localPos = new Vector3(player.IsFacingRight() ? 1f : -1f, General.DirectionToVector(player.GetDirection()).y + 1f, 0f);
 
         transform.localPosition = localPos * distance;
     }

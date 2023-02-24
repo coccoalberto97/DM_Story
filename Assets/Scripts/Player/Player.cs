@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Controller2D))]
+[RequireComponent(typeof(CharacterController2D))]
 public class Player : Entity, IHittable
 {
 
@@ -18,23 +18,24 @@ public class Player : Entity, IHittable
     public bool forceApplied;
 
     public float moveSpeed = 6f;
-    float gravity;
     float maxJumpVelocity;
     float minJumpVelocity;
     Vector3 velocity;
     Vector2 movementInput;
-    float velocityXSmoothing;
 
     Direction direction;
     bool facingRight;
 
     Animator animator;
-    SpriteRenderer spriteRenderer;
+    SpriteRenderer bodyRenderer;
+    public SpriteRenderer armsRenderer;
+
     public GameObject interactableIcon;
 
     KeyCode jumpkey = KeyCode.Z;
 
-    Controller2D controller;
+    CharacterController2D controller;
+    Rigidbody2D rigidBody;
     public static Player instance;
 
     public Vector2 colliderSize = new Vector2(1.5f, 3);
@@ -68,7 +69,9 @@ public class Player : Entity, IHittable
             double expFactor = (double)damage * 100 / maxHealth;
             SubtractExp((int)Math.Floor(expFactor));
             Debug.Log($"Damage {damage} exp lost {expFactor}");
-            SetVelocity(Vector2.up * 16.0f);
+            // TODO fix dmg
+            //
+            // SetVelocity(Vector2.up * 16.0f);
             StartCoroutine(SetInvincible());
         }
     }
@@ -76,12 +79,13 @@ public class Player : Entity, IHittable
     private void Start()
     {
         animator = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        controller = GetComponent<Controller2D>();
+        bodyRenderer = GetComponent<SpriteRenderer>();
+        controller = GetComponent<CharacterController2D>();
+        rigidBody = GetComponent<Rigidbody2D>();
         //Initialize Vertical Values
-        gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
-        maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
-        minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpHeight);
+        float jumpFactor = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
+        maxJumpVelocity = Mathf.Abs(jumpFactor) * timeToJumpApex;
+        minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(jumpFactor) * minJumpHeight);
     }
 
     private void Update()
@@ -90,13 +94,22 @@ public class Player : Entity, IHittable
         {
             return;
         }
-        GetInput();
-        Animation();
         Horizontal();
         Vertical();
-        ApplyMovement();
+        GetInput();
         GetKey();
     }
+
+    private void FixedUpdate()
+    {
+        if (!inputEnabled)
+        {
+            return;
+        }
+        Animation();
+        ApplyMovement();
+    }
+
 
     private void GetInput()
     {
@@ -111,7 +124,7 @@ public class Player : Entity, IHittable
         }
 
         float verticalAimFactor = movementInput.y;
-        if (controller.collisions.below)
+        if (controller.IsGrounded())
         {
             verticalAimFactor = Mathf.Clamp01(verticalAimFactor);
         }
@@ -120,18 +133,22 @@ public class Player : Entity, IHittable
         if (verticalAimFactor != 0)
         {
             direction = (verticalAimFactor > 0 ? Direction.UP : Direction.DOWN);
-            //facingRight = movementInput.x > 0;
         }
 
     }
 
     private void Animation()
     {
-        spriteRenderer.flipX = facingRight;
-        animator.SetFloat("VelocityX", Mathf.Abs(movementInput.x));
-        animator.SetFloat("VelocityY", Mathf.Sign(velocity.y));
+        bodyRenderer.flipX = facingRight;
+        armsRenderer.flipX = facingRight;
+        animator.SetFloat("VelocityX", Mathf.Abs(rigidBody.velocity.x));
+        animator.SetFloat("VelocityY", Mathf.Sign(rigidBody.velocity.y));
         animator.SetFloat("Looking", General.DirectionToVector(direction).y);
-        animator.SetBool("Grounded", controller.collisions.below);
+        animator.SetBool("Grounded", controller.IsGrounded());
+    }
+
+    private void Horizontal() {
+        velocity.x = movementInput.x * moveSpeed;
     }
 
     private void Vertical()
@@ -140,38 +157,17 @@ public class Player : Entity, IHittable
         {
             forceApplied = false;
         }
-        else if (controller.collisions.above || controller.collisions.below)
-        {
-            velocity.y = 0;
-        }
-
-        if (Input.GetKeyDown(jumpkey) && controller.collisions.below)
+       
+        if (Input.GetKeyDown(jumpkey) && controller.IsGrounded())
         {
             velocity.y = maxJumpVelocity;
         }
-
-        if (Input.GetKeyUp(jumpkey))
-        {
-            if (velocity.y > minJumpVelocity)
-            {
-                velocity.y = minJumpVelocity;
-            }
-        }
-
-        velocity.y += gravity * Time.deltaTime;
-
-    }
-
-    private void Horizontal()
-    {
-        float targetVelocityX = movementInput.x * moveSpeed;
-        velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing,
-            accelerationTimeGrounded * (controller.collisions.below ? 1.0f : accelerationTimeAirborneMultiplier));
     }
 
     private void ApplyMovement()
     {
-        controller.Move(velocity * Time.deltaTime);
+        controller.Move(velocity.x * Time.fixedDeltaTime, velocity.y > 0);
+        velocity.y = 0;
     }
 
 
@@ -195,12 +191,14 @@ public class Player : Entity, IHittable
         float elapsedTime = 0f;
         while (elapsedTime < timeInvincible)
         {
-            spriteRenderer.enabled = !spriteRenderer.enabled;
+            bodyRenderer.enabled = !bodyRenderer.enabled;
+            armsRenderer.enabled = !armsRenderer.enabled;
             elapsedTime += 0.04f;
             yield return new WaitForSeconds(0.04f);
         }
 
-        spriteRenderer.enabled = true;
+        bodyRenderer.enabled = true;
+        armsRenderer.enabled = true;
         invincible = false;
     }
 

@@ -95,11 +95,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d3be7f25356f8144821421e1fa6f2e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
+  damage: 100
   hittableMask:
     serializedVersion: 2
     m_Bits: 1280
-  weaponDamageType: 1
+  weaponDamageType: 0
   speed: 20
   range: 12
   timeoutMuzzleFlash: particle_muzzle_flash
